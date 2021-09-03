@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="route53-ddns",
-    version="0.0.1",
+    version="0.0.2",
     author="Enrico Carlesso",
     author_email="enricocarlesso@gmail.com",
     description="A simple package that updated an AWS Route53 A record to point to the current IP",
