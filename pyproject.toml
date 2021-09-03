@@ -16,3 +16,17 @@ profile = "black"
 
 # To maintain consistency with other settings
 line_length = 120
+
+[tool.pytest.ini_options]
+
+testpaths = "test"
+
+addopts = [
+    "--verbose",
+    "--cov=route53_ddns",
+    "--cov-report=term-missing",
+    "--cov-report=html:coverage_html",
+    "--cov-report=xml:coverage.xml",
+    "--color=yes",
+    "--cov-fail-under=100"
+]

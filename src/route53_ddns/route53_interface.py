@@ -19,6 +19,7 @@ def get_hosted_zone_id(zone_name: str) -> str:
         str: the id of the zone as returned by Route53, like `/hostedzone/XXXXXXXXXXX`
     """
     zones = route53.list_hosted_zones()
+    logger.debug(f"list_hosted_zones output: {zones}")
     if not zones["HostedZones"]:
         logger.fatal(f"No zone found in the account. Please check if you have the right AWS credentials in place.")
         raise KeyError(f"No zone found in the account")
@@ -73,11 +74,11 @@ def get_current_ip(zone_id: str, record_name: str) -> Optional[str]:
 
     if matched:
         logger.info(f"Found matching record for {record_name}: {record}")
-        resource_record = record["ResourceRecords"]
         if matched["Type"] != "A":
             raise ValueError(
                 f"The current record for {record_name} is of type {matched['Type']}! Use a different record."
             )
+        resource_record = record["ResourceRecords"]
         if len(resource_record) > 1:
             raise ValueError(
                 f"The current A record for {record_name} has {len(resource_record)} entries: "
@@ -92,12 +93,13 @@ def get_current_ip(zone_id: str, record_name: str) -> Optional[str]:
         return None
 
 
-def update_record(zone_name: str, record_name: str, target_ip: str, dryrun: bool = False):
+def update_record(zone_name: str, record_name: str, target_ip: str, dryrun: bool = False) -> None:
     zone_id = get_hosted_zone_id(zone_name=zone_name)
 
     current_ip = get_current_ip(zone_id=zone_id, record_name=record_name)
     if current_ip == target_ip:
         logger.info(f"The current value of {record_name} matches the current IP, nothing to do.")
+        return
     else:
         logger.info(f"The current value of {record_name} points to {current_ip}. Will update to {target_ip}")
 
