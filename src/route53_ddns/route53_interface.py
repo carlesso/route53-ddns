@@ -59,8 +59,8 @@ def wait_for_change_completion(change_id: str, wait_time: int = 5) -> None:
         sleep(wait_time)
 
 
-def dryrun_changes(zone_id: str, record_name: str) -> Optional[str]:
-    logger.info("Running in dryrun mode. Checking current records")
+def get_current_ip(zone_id: str, record_name: str) -> Optional[str]:
+    logger.info("Checking current records")
     zone_records = route53.list_resource_record_sets(HostedZoneId=zone_id)
 
     matched = None
@@ -95,7 +95,7 @@ def dryrun_changes(zone_id: str, record_name: str) -> Optional[str]:
 def update_record(zone_name: str, record_name: str, target_ip: str, dryrun: bool = False):
     zone_id = get_hosted_zone_id(zone_name=zone_name)
 
-    current_ip = dryrun_changes(zone_id=zone_id, record_name=record_name)
+    current_ip = get_current_ip(zone_id=zone_id, record_name=record_name)
     if current_ip == target_ip:
         logger.info(f"The current value of {record_name} matches the current IP, nothing to do.")
     else:

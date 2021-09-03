@@ -34,9 +34,9 @@ def route53_ddns(zone: str, record: str, check_only: bool, dryrun: bool, verbose
     If you have a Hosted Zone in your AWS account called `example.com` and you want to have
     `home.example.net` pointing to your public IP address, you can do:
 
-    route53-ddns --zone example.com --record home
-    # or
-    route53-ddns --zone example.com --record home.example.com
+    $ route53-ddns --zone example.com --record home
+
+    $ route53-ddns --zone example.com --record home.example.com
 
     If the record doesn't end with the zone, it will be automatically appended for you.
     """
@@ -48,6 +48,7 @@ def route53_ddns(zone: str, record: str, check_only: bool, dryrun: bool, verbose
     target_ip = get_ip()
 
     if check_only:
+        logging.info(f"Running in check-only mode. Validating propagation of {target_ip}")
         verify_propagation(record=record, target_ip=target_ip)
         return
 
