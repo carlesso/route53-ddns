@@ -1,10 +1,10 @@
-from typing import Optional
-import boto3
-from pprint import pprint
-from time import sleep
 import logging
+from time import sleep
+from typing import Optional
 
-route53 = boto3.client('route53')
+import boto3
+
+route53 = boto3.client("route53")
 
 logger = logging.getLogger(__name__)
 
@@ -14,26 +14,26 @@ def get_hosted_zone_id(zone_name: str) -> str:
 
     Args:
         zone_name (str): The DNS name of the zone, like `mydomain.com`
-    
+
     Returns:
         str: the id of the zone as returned by Route53, like `/hostedzone/XXXXXXXXXXX`
-    """    
+    """
     zones = route53.list_hosted_zones()
-    if not zones['HostedZones']:
+    if not zones["HostedZones"]:
         logger.fatal(f"No zone found in the account. Please check if you have the right AWS credentials in place.")
         raise KeyError(f"No zone found in the account")
-    
-    for zone in zones['HostedZones']:
-        if zone['Name'].startswith(zone_name):
+
+    for zone in zones["HostedZones"]:
+        if zone["Name"].startswith(zone_name):
             logger.info(f"Found zone {zone['Id']} with name {zone['Name']} matching the expected {zone_name}")
-            return zone['Id']
+            return zone["Id"]
 
     raise ValueError(f"No zone found matching {zone_name}")
 
 
 def wait_for_change_completion(change_id: str, wait_time: int = 5) -> None:
     """Wait for the change to be propagated.
-    
+
     This is simply a wrappe around boto3.get_change, calling it every
     `wait_time` seconds until the change result `INSYNC`.
 
@@ -43,15 +43,15 @@ def wait_for_change_completion(change_id: str, wait_time: int = 5) -> None:
     Args:
         change_id (str): the ID of the change to track, returned by any route53 API that returns a `ChangeInfo`
         wait_time (:obj:`int`, optional): the number of seconds between checks of the change status, defaults to 5
-    """    
+    """
     change_status = None
     while True:  # TODO: add a limit of the iterations
         # Get the curret status
         response = route53.get_change(Id=change_id)
-        change_status = response['ChangeInfo']['Status']
+        change_status = response["ChangeInfo"]["Status"]
         logger.debug(f"get_change output: {response}")
 
-        if change_status == 'INSYNC':
+        if change_status == "INSYNC":
             logger.info(f"Change {change_id} has completed with status {change_status}")
             return
 
@@ -63,18 +63,18 @@ def dryrun_changes(zone_id: str, record_name: str) -> Optional[str]:
     logger.info("Running in dryrun mode. Checking current records")
     zone_records = route53.list_resource_record_sets(HostedZoneId=zone_id)
 
-    matched = False
-    for record in zone_records['ResourceRecordSets']:
+    matched = None
+    for record in zone_records["ResourceRecordSets"]:
         logger.info(f"Found record of type {record['Type']} with ttl {record['TTL']} named {record['Name']}")
-        
-        if record['Name'] == f"{record_name}.":
+
+        if record["Name"] == f"{record_name}.":
             matched = record
             break
 
     if matched:
         logger.info(f"Found matching record for {record_name}: {record}")
-        resource_record = record['ResourceRecords']
-        if matched['Type'] != 'A':
+        resource_record = record["ResourceRecords"]
+        if matched["Type"] != "A":
             raise ValueError(
                 f"The current record for {record_name} is of type {matched['Type']}! Use a different record."
             )
@@ -84,11 +84,12 @@ def dryrun_changes(zone_id: str, record_name: str) -> Optional[str]:
                 f"{', '.join(i['Value'] for i in resource_record)}. "
                 f"This operations is unsafe, please use a different record name, or remove the existing entry manually."
             )
-        current_dns_ip = resource_record[0]['Value']
+        current_dns_ip = resource_record[0]["Value"]
         logger.info(f"The current target for {record_name} is {current_dns_ip}")
         return current_dns_ip
     else:
         logger.info(f"No records found matching {record_name}. A new 'A' record would be created.")
+        return None
 
 
 def update_record(zone_name: str, record_name: str, target_ip: str, dryrun: bool = False):
@@ -99,7 +100,7 @@ def update_record(zone_name: str, record_name: str, target_ip: str, dryrun: bool
         logger.info(f"The current value of {record_name} matches the current IP, nothing to do.")
     else:
         logger.info(f"The current value of {record_name} points to {current_ip}. Will update to {target_ip}")
-    
+
     if dryrun:
         logger.info("Running in dryrun mode, not updating Route53")
         return
@@ -108,21 +109,21 @@ def update_record(zone_name: str, record_name: str, target_ip: str, dryrun: bool
     update_response = route53.change_resource_record_sets(
         HostedZoneId=zone_id,
         ChangeBatch={
-            'Comment': f"Updating record to {target_ip}",
-            'Changes': [
+            "Comment": f"Updating record to {target_ip}",
+            "Changes": [
                 {
-                    'Action': 'UPSERT',
-                    'ResourceRecordSet': {
-                        'Name': record_name,
-                        'Type': 'A',
-                        'TTL': 60,
-                        'ResourceRecords': [{'Value': target_ip}]
-                    }
+                    "Action": "UPSERT",
+                    "ResourceRecordSet": {
+                        "Name": record_name,
+                        "Type": "A",
+                        "TTL": 60,
+                        "ResourceRecords": [{"Value": target_ip}],
+                    },
                 }
-            ]
-        }
+            ],
+        },
     )
 
-    change_id = update_response['ChangeInfo']['Id']
+    change_id = update_response["ChangeInfo"]["Id"]
     wait_for_change_completion(change_id=change_id)
     logger.info("Update completed")
