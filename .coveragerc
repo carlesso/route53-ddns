@@ -1,2 +1,2 @@
 [run]
-omit = src/route53_ddns/cli.py
+omit = **/cli.py
