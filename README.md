@@ -53,3 +53,7 @@ $ route53-ddns --zone example.com --record home -c
 2021-09-02 22:14:44,145 - root - INFO - Running in check-only mode. Validating propagation of 10.0.0.1
 2021-09-02 22:14:44,146 - route53_ddns.ip_utilities - INFO - Record hom.example.com points to 10.0.0.1
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcarlesso%2Froute53-ddns.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcarlesso%2Froute53-ddns?ref=badge_large)
