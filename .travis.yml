@@ -1,13 +1,14 @@
 language: python
 python:
-  - "3.6"      # current default Python on Travis CI
+  - "3.6"
   - "3.7"
   - "3.8"
   - "3.9"
   - "nightly"  # nightly build
-# command to install dependencies
+# Command to install dependencies
+# Include also `test` dependencies
 install:
-  - python setup.py install
-# command to run tests
+  - pip install '.[test]'
+# Command to run tests
 script:
   - pytest
