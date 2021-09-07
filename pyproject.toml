@@ -28,5 +28,5 @@ addopts = [
     "--cov-report=html:coverage_html",
     "--cov-report=xml:coverage.xml",
     "--color=yes",
-    "--cov-fail-under=100"
+    "--cov-fail-under=100",
 ]
