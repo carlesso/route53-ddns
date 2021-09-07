@@ -12,10 +12,13 @@ jobs:
           python-version: 3.9
       - name: Install dependencies
         run: pip install '.[test]'
+      - name: Install coveralls
+        run: pip install coveralls
       - name: Run tests and collect coverage
         run: |
           pytest
           coverage xml
+          coveralls
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
       - name: Coveralls GitHub Action
