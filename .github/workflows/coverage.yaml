@@ -16,7 +16,6 @@ jobs:
         run: |
           pytest
           coverage xml
-          coveralls
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
       - name: Coveralls GitHub Action
