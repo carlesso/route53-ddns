@@ -1,6 +1,9 @@
 # route53-ddns
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcarlesso%2Froute53-ddns.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcarlesso%2Froute53-ddns?ref=badge_shield)
 
+[![wheel status](https://img.shields.io/pypi/wheel/route53-ddns.svg)](https://pypi.org/project/route53-ddns/)
+
+[![Build Status](https://app.travis-ci.com/carlesso/route53-ddns.svg?branch=main)](https://app.travis-ci.com/carlesso/route53-ddns)
 
 This package provide a simple CLI to update a Route53 Hosted Zone. This can be run as
 cron job to provide a dynamic DNS functionality.
