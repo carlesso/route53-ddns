@@ -3,6 +3,7 @@
 
 [![wheel status](https://img.shields.io/pypi/wheel/route53-ddns.svg)](https://pypi.org/project/requests-aws4auth/)
 
+[![Build Status](https://app.travis-ci.com/carlesso/route53-ddns.svg?branch=main)](https://app.travis-ci.com/carlesso/route53-ddns)
 
 This package provide a simple CLI to update a Route53 Hosted Zone. This can be run as
 cron job to provide a dynamic DNS functionality.
