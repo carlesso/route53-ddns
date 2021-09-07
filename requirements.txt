@@ -1,0 +1,12 @@
+# Runtime dependencies
+click
+boto3
+requests
+tenacity
+
+# Test/Build only
+black
+isort
+mypy
+pytest
+pytest-cov
