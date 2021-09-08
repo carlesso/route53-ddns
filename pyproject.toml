@@ -30,3 +30,9 @@ addopts = [
     "--color=yes",
     "--cov-fail-under=100",
 ]
+
+[tool.mypy]
+check_untyped_defs = true
+show_error_codes = true
+pretty = true
+ignore_missing_imports = true
