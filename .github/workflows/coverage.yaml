@@ -20,8 +20,8 @@ jobs:
           coverage xml
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
-      - name: Install missing types
-        run: mypy --install-types
+      - name: Install requests types
+        run: pip install types-requests
       - name: Run mypy
         uses: jpetrucciani/mypy-check@master
         with:
