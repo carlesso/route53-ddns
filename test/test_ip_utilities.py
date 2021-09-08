@@ -32,25 +32,25 @@ def test_wait_for_propagation_retries(verify_propagation_mock, sleep_mock):
 def test_verify_propagation_not_propagated(gethostbyname_ex_mock):
     gethostbyname_ex_mock.side_effect = socket.gaierror("Not resolvable")
 
-    assert ip_utilities.verify_propagation("record", "10.0.0.1") == False
+    assert ip_utilities.verify_propagation("record", "10.0.0.1") is False
 
 
 @patch('route53_ddns.ip_utilities.gethostbyname_ex')
 def test_verify_propagation_correct_ip(gethostbyname_ex_mock):
     gethostbyname_ex_mock.return_value = (None, None, ["10.0.0.1"])
 
-    assert ip_utilities.verify_propagation("record", "10.0.0.1") == True
+    assert ip_utilities.verify_propagation("record", "10.0.0.1") is True
 
 
 @patch('route53_ddns.ip_utilities.gethostbyname_ex')
 def test_verify_propagation_incorrect_ip(gethostbyname_ex_mock):
     gethostbyname_ex_mock.return_value = (None, None, ["10.0.0.2"])
 
-    assert ip_utilities.verify_propagation("record", "10.0.0.1") == False
+    assert ip_utilities.verify_propagation("record", "10.0.0.1") is False
 
 
 @patch('route53_ddns.ip_utilities.gethostbyname_ex')
 def test_verify_propagation_multiple_ip(gethostbyname_ex_mock):
     gethostbyname_ex_mock.return_value = (None, None, ["10.0.0.1", "10.0.0.2"])
 
-    assert ip_utilities.verify_propagation("record", "10.0.0.1") == False
+    assert ip_utilities.verify_propagation("record", "10.0.0.1") is False

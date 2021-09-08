@@ -1,5 +1,5 @@
 from route53_ddns import route53_interface
-from unittest.mock import MagicMock, call, patch
+from unittest.mock import call, patch
 import pytest
 
 
@@ -38,7 +38,7 @@ def test_wait_for_change_completion(route53_mock, sleep_mock):
     ]
 
     route53_interface.wait_for_change_completion(change_id="change_id")
-    
+
     route53_mock.get_change.assert_has_calls([
         call(Id="change_id"),
         call(Id="change_id"),
@@ -58,7 +58,7 @@ def test_get_current_ip_not_found(route53_mock):
         ]
     }
 
-    assert route53_interface.get_current_ip(zone_id="my.zone", record_name="record") == None
+    assert route53_interface.get_current_ip(zone_id="my.zone", record_name="record") is None
 
 
 @patch("route53_ddns.route53_interface.route53")
@@ -148,7 +148,7 @@ def test_update_record(route53_mock, get_hosted_zone_id_mock, get_current_ip_moc
     route53_mock.change_resource_record_sets.assert_called_once_with(
         HostedZoneId="zone_id",
         ChangeBatch={
-            "Comment": f"Updating record to 10.0.0.1",
+            "Comment": "Updating record to 10.0.0.1",
             "Changes": [
                 {
                     "Action": "UPSERT",
@@ -163,6 +163,3 @@ def test_update_record(route53_mock, get_hosted_zone_id_mock, get_current_ip_moc
         },
     )
     wait_for_change_completion.assert_called_once()
-
-
-

@@ -21,8 +21,8 @@ def get_hosted_zone_id(zone_name: str) -> str:
     zones = route53.list_hosted_zones()
     logger.debug(f"list_hosted_zones output: {zones}")
     if not zones["HostedZones"]:
-        logger.fatal(f"No zone found in the account. Please check if you have the right AWS credentials in place.")
-        raise KeyError(f"No zone found in the account")
+        logger.fatal("No zone found in the account. Please check if you have the right AWS credentials in place.")
+        raise KeyError("No zone found in the account")
 
     for zone in zones["HostedZones"]:
         if zone["Name"].startswith(zone_name):
