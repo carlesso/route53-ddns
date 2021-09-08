@@ -5,13 +5,16 @@ env:
 jobs:
   run:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ '3.x', 'pypy-3.6', 'pypy-3.7' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up Python 3.9
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: pip install '.[test]'
       - name: Run tests and collect coverage
@@ -21,7 +24,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
       - name: Install requests types
-        run: pip install types-requests
+        run: python3 -m pip install types-requests
       - name: Run mypy
         uses: jpetrucciani/mypy-check@master
         with:
