@@ -3,6 +3,8 @@
 
 [![wheel status](https://img.shields.io/pypi/wheel/route53-ddns.svg)](https://pypi.org/project/route53-ddns/)
 
+[![Build and push coverage to Codecov](https://github.com/carlesso/route53-ddns/actions/workflows/coverage.yaml/badge.svg)](https://github.com/carlesso/route53-ddns/actions/workflows/coverage.yaml)
+
 [![Build Status](https://app.travis-ci.com/carlesso/route53-ddns.svg?branch=main)](https://app.travis-ci.com/carlesso/route53-ddns)
 
 ![Codecov](https://img.shields.io/codecov/c/github/carlesso/route53-ddns)
