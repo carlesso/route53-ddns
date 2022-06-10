@@ -66,7 +66,7 @@ def get_current_ip(zone_id: str, record_name: str) -> Optional[str]:
 
     matched = None
     for record in zone_records["ResourceRecordSets"]:
-        logger.info(f"Found record of type {record['Type']} with ttl {record['TTL']} named {record['Name']}")
+        logger.info(f"Found record of type {record['Type']} named {record['Name']}")
 
         if record["Name"] == f"{record_name}.":
             matched = record
